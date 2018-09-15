@@ -23,7 +23,7 @@ module.exports = {
 	},
 
 	savePrices: (prices) => {
-		logger.log('Saving Prices');
+		logger.log(`Saving ${prices.length} Prices`);
 		return knex('prices').insert(prices);
 	}
 };

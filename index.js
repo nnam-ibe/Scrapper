@@ -3,14 +3,19 @@ const knex = require('./knex.js');
 const logger = require('./logger.js').file('index.js');
 
 knex.getItems()
+	.then(getActiveItem)
 	.then(mapItems)
 	.then(savePrices)
 	.catch(logger.error.bind(logger))
 	.then(process.exit);
 
-function mapItems(items) {
-	if (!items || items.length <= 0) items = [];
+function getActiveItem(items) {
+	if (!items || items.length <= 0) return [];
 
+	return items.filter((item) => item.active);
+}
+
+function mapItems(items) {
 	let mappedItems = items.map((item) => getItemPrice(item));
 	return Promise.all(mappedItems);
 }
