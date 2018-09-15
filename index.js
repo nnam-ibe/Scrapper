@@ -9,7 +9,7 @@ knex.getItems()
 	.then(process.exit);
 
 function mapItems(items) {
-	if (!items || items.length <= 0) throw new Error('Empty Array');
+	if (!items || items.length <= 0) items = [];
 
 	let mappedItems = items.map((item) => getItemPrice(item));
 	return Promise.all(mappedItems);
@@ -19,24 +19,32 @@ function getItemPrice(item) {
 	return scrapper.getPrice(item)
 		.then(_getNumericValue)
 		.then((price) => {
+			if (!price) return null;
+
 			item.price = price;
 			return item;
 		})
 }
 
 function savePrices(items) {
-	let prices = items.map((item) => {
-		return {
+	let prices = items.reduce((acc, item) => {
+		if (!item) return acc;
+
+		acc.push({
 			item_id: item.id,
 			price: item.price,
 			date: new Date()
-		};
-	});
+		});
+
+		return acc;
+	}, []);
 
 	return knex.savePrices(prices);
 }
 
 function _getNumericValue(price) {
+	if (!price) return null;
+
 	price = price.replace(/[^0-9]/g, '');
 	return Number(price);
 }
