@@ -9,6 +9,7 @@ const knex = require('knex')({
 		database: process.env.PRICE_TRACKER_DATABASE
 	}
 });
+const uuidv1 = require('uuid/v1');
 
 
 module.exports = {
@@ -23,7 +24,16 @@ module.exports = {
 	},
 
 	savePrices: (prices) => {
+		if (!prices || prices.length <= 0 ) {
+			logger.log(`Nothing to save`);
+			return;
+		}
+
 		logger.log(`Saving ${prices.length} Prices`);
+		prices = prices.map((priceReord) => {
+			priceReord.pid = uuidv1();
+			return priceReord;
+		});
 		return knex('prices').insert(prices);
 	}
 };
