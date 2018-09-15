@@ -5,7 +5,7 @@ const logger = require('./logger.js').file('index.js');
 knex.getItems()
 	.then(mapItems)
 	.then(savePrices)
-	.catch(logger.error)
+	.catch(logger.error.bind(logger))
 	.then(process.exit);
 
 function mapItems(items) {

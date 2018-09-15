@@ -8,6 +8,22 @@ let logger = require('./logger.js').file('server.js');
 app.get('/', (req, res) => res.send('Hello There!, try /api/check_price'));
 
 app.get('/api/check_price', (req, res) => {
+	let { uri, target, context } = req.query;
+
+	if (!uri) {
+		logger.error('Missing uri');
+		res.send('Missing uri param');
+		return;
+	} else if (!target) {
+		logger.error('Missing target');
+		res.send('Missing target param');
+		return;
+	} else if (!context) {
+		logger.error('Missing context');
+		res.send('Missing context param');
+		return;
+	}
+
 	logger.log(`Checking Prices @ ${req.query.uri}`);
 
 	let params = {

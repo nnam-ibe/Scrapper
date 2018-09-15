@@ -15,6 +15,6 @@ module.exports = {
 				const text = $(params.target, params.context).text();
 				return text;
 			})
-			.catch(logger.error)
+			.catch(logger.error.bind(logger))
 	}
 };
