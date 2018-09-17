@@ -50,6 +50,6 @@ function savePrices(items) {
 function _getNumericValue(price) {
 	if (!price) return null;
 
-	price = price.replace(/[^0-9]/g, '');
+	price = price.replace(/[^0-9.]/g, '');
 	return Number(price);
 }
