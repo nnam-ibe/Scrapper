@@ -18,20 +18,36 @@ module.exports = {
 		return knex.select().table('items');
 	},
 
+	saveItems: (items) => {
+		if (!items || items.length <= 0) {
+			logger.log(`Nothing to save`);
+			return;
+		}
+
+		logger.log(`Saving ${items.length} Items`);
+		items = items.map((itemRecord) => {
+			if (!itemRecord.id) itemRecord.id = uuidv1();
+
+			return itemRecord;
+		});
+		return knex('items').insert(items);
+	},
+
 	getPrices: () => {
 		logger.log('Getting Prices');
 		return knex.select().table('prices');
 	},
 
 	savePrices: (prices) => {
-		if (!prices || prices.length <= 0 ) {
+		if (!prices || prices.length <= 0) {
 			logger.log(`Nothing to save`);
 			return;
 		}
 
 		logger.log(`Saving ${prices.length} Prices`);
 		prices = prices.map((priceReord) => {
-			priceReord.pid = uuidv1();
+			if (!priceReord.pid) priceReord.pid = uuidv1();
+
 			return priceReord;
 		});
 		return knex('prices').insert(prices);
